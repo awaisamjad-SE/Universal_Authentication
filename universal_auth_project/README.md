@@ -1,4 +1,25 @@
+
 # Universal Authentication API
+
+## What is the Backend?
+
+The backend is a Django REST Framework API that provides all authentication, user management, and security logic for Universal Auth. It handles:
+- User registration, login, and JWT token management
+- Email verification and password reset via OTP
+- Two-Factor Authentication (2FA) with TOTP (Google Authenticator, Authy, etc.)
+- All business logic, validation, and secure storage of user data
+
+The backend lives in the `universal_auth_project/` folder. It exposes REST API endpoints for the frontend or any client to use.
+
+## What is the Frontend?
+
+The frontend is a modern React application (see `universal-auth-frontend/`) that provides a user interface for Universal Auth. It allows users to:
+- Register, log in, and manage their profile
+- Enable and verify 2FA
+- Reset their password
+- Interact with all backend API endpoints securely
+
+The frontend connects to the backend via HTTP API calls and handles all user-facing logic and UI/UX.
 
 ## Project Purpose
 
