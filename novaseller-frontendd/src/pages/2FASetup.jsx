@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { setup2FA, verify2FA } from '../utils/api';
 import Loader from '../components/Loader';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/authContext';
 
 export default function TwoFASetup() {
+  const { user, loading } = useContext(AuthContext);
   const [qr, setQr] = useState(null);
   const [secret, setSecret] = useState('');
   const [code, setCode] = useState('');
@@ -11,6 +13,12 @@ export default function TwoFASetup() {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && user && user.is_2fa_enabled) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
 
   const handleSetup = async () => {
     setError(null);
@@ -39,6 +47,8 @@ export default function TwoFASetup() {
       setSubmitting(false);
     }
   };
+
+  if (loading || !user) return <div className="min-h-screen flex items-center justify-center text-lg">Loading...</div>;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">

@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { register } from '../utils/api';
 import Loader from '../components/Loader';
 import AuthContext from '../context/authContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
-  const [error, setError] = useState(null)
+  // const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const { user } = useContext(AuthContext)
@@ -22,15 +24,22 @@ export default function Signup() {
   const [lastName, setLastName] = useState('');
   const submit = async (e) => {
     e.preventDefault();
-    setError(null);
-    if (!email || !username || !password || !password2 || !firstName || !lastName) return setError('Please fill all fields');
-    if (password !== password2) return setError('Passwords do not match');
+  // setError(null); // No longer needed, using toast notifications
+    if (!email || !username || !password || !password2 || !firstName || !lastName) {
+      toast.error('Please fill all fields', { position: 'top-right', autoClose: 4000 });
+      return;
+    }
+    if (password !== password2) {
+      toast.error('Passwords do not match', { position: 'top-right', autoClose: 4000 });
+      return;
+    }
     setSubmitting(true);
     try {
       await register({ email, username, first_name: firstName, last_name: lastName, password });
-      navigate('/otp-verification', { state: { email } });
+      toast.success('Registration successful! Please verify your email.', { position: 'top-right', autoClose: 4000 });
+      setTimeout(() => navigate('/otp-verification', { state: { email } }), 1200);
     } catch (err) {
-      setError(err.response?.data?.detail || JSON.stringify(err.response?.data || 'Signup failed'));
+      toast.error(err.response?.data?.detail || JSON.stringify(err.response?.data || 'Signup failed'), { position: 'top-right', autoClose: 4000 });
     } finally {
       setSubmitting(false);
     }
@@ -41,7 +50,8 @@ export default function Signup() {
       <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Create an account</h2>
   <p className="text-sm text-gray-500 mb-4">Join Universal Auth to access your account</p>
-        {error && <div role="alert" className="text-red-500 text-sm mt-1 mb-2">{error}</div>}
+  {/* ToastContainer renders pop-up notifications */}
+  <ToastContainer position="top-right" autoClose={4000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
         <form onSubmit={submit} className="space-y-4">
           <div>
             <label className="block text-sm text-gray-500 mb-1">Email</label>

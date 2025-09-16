@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { login as loginApi, twoFALogin } from '../utils/api';
 import Loader from '../components/Loader';
 import AuthContext from '../context/authContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -25,8 +27,11 @@ export default function Login() {
   const [twoFACode, setTwoFACode] = useState('');
   const submit = async (e) => {
     e.preventDefault();
-    setError(null);
-    if (!email || !password) return setError('Please fill all fields');
+  setError(null);
+    if (!email || !password) {
+      toast.error('Please fill all fields', { position: 'top-right', autoClose: 4000 });
+      return;
+    }
     if (!isValidEmail(email)) {
       setEmailError('Please enter a valid email address');
       return;
@@ -38,7 +43,7 @@ export default function Login() {
         const res = await loginApi({ email, password });
         if (res.data.detail === '2FA code required') {
           setTwoFARequired(true);
-          setError('2FA code required. Please use your authenticator app.');
+          toast.error('2FA code required. Please use your authenticator app.', { position: 'top-right', autoClose: 4000 });
         } else {
           const tokens = { access: res.data.access, refresh: res.data.refresh };
           const userData = res.data.user || res.data;
@@ -49,13 +54,13 @@ export default function Login() {
       } else {
         // Second step: submit 2FA code
         if (!twoFACode) {
-          setError('Please enter your 2FA code.');
+          toast.error('Please enter your 2FA code.', { position: 'top-right', autoClose: 4000 });
           setSubmitting(false);
           return;
         }
         const res = await twoFALogin({ email, password, code: twoFACode });
         if (res.data.detail === 'Invalid 2FA code.') {
-          setError('Invalid 2FA code.');
+          toast.error('Invalid 2FA code.', { position: 'top-right', autoClose: 4000 });
         } else {
           const tokens = { access: res.data.access, refresh: res.data.refresh };
           const userData = res.data.user || res.data;
@@ -65,7 +70,7 @@ export default function Login() {
         }
       }
     } catch (err) {
-      setError(err.response?.data?.non_field_errors?.[0] || err.response?.data?.detail || 'Login failed');
+  toast.error(err.response?.data?.non_field_errors?.[0] || err.response?.data?.detail || 'Login failed', { position: 'top-right', autoClose: 4000 });
     } finally {
       setSubmitting(false);
     }
@@ -76,7 +81,8 @@ export default function Login() {
       <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Welcome back</h2>
   <p className="text-sm text-gray-500 mb-4">Sign in to continue to Universal Auth</p>
-        {error && <div role="alert" className="text-red-500 text-sm mt-1 mb-2">{error}</div>}
+  {/* ToastContainer renders pop-up notifications */}
+  <ToastContainer position="top-right" autoClose={4000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
         <form onSubmit={submit} className="space-y-4">
           <div>
             <label className="block text-sm text-gray-500 mb-1">Email</label>
