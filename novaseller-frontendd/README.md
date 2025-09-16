@@ -1,15 +1,18 @@
-NovaSeller frontend (Vite + React + Tailwind)
 
-Steps to run locally:
+# universal-auth-frontend (Vite + React + Tailwind)
 
-- Install deps: npm install
-- Start dev server: npm run dev
+# Steps to run locally:
 
-Environment:
-- The frontend expects the Django API at VITE_API_BASE (defaults to http://127.0.0.1:8000)
+1. Install dependencies:
+	npm install
+2. Start the dev server:
+	npm run dev
 
-Tailwind setup:
-- Tailwind is configured via tailwind.config.cjs and postcss.config.cjs
+## Environment
+- The frontend expects the Django API at `VITE_API_BASE` (defaults to http://127.0.0.1:8000)
+
+## Tailwind setup
+- Tailwind is configured via `tailwind.config.cjs` and `postcss.config.cjs`
 - Main CSS imports Tailwind layers from `src/index.css`
 # React + Vite
 
