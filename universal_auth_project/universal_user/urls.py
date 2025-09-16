@@ -8,7 +8,10 @@ from .views import (
     SendOTPView,
     VerifyOTPView,
     PasswordResetView,
-    PasswordResetConfirmView
+    PasswordResetConfirmView,
+    TwoFASetupView,
+    TwoFAVerifyView,
+    TwoFALoginView
 )
 
 urlpatterns = [
@@ -20,4 +23,7 @@ urlpatterns = [
     path("verify-otp/", VerifyOTPView.as_view(), name="verify-otp"),
     path("password-reset/", PasswordResetView.as_view(), name="password-reset"),
     path("password-reset-confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
+    path("2fa/setup/", TwoFASetupView.as_view(), name="2fa-setup"),
+    path("2fa/verify/", TwoFAVerifyView.as_view(), name="2fa-verify"),
+    path("2fa/login/", TwoFALoginView.as_view(), name="2fa-login"),
 ]

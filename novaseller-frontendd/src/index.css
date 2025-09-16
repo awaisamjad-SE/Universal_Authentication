@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --container-max: 1280px;
+}
+
+/* Small custom styles that complement Tailwind */
+body {
+  @apply bg-gray-900 text-gray-100 min-h-screen antialiased;
+}
+
+.app-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  @apply bg-gray-800/60 p-6 rounded-lg shadow-md;
+}
+
+.logo {
+  height: 3.5rem;
+}
+
+/* keep older light-mode tweaks */
+@media (prefers-color-scheme: light) {
+  body {
+    @apply bg-white text-slate-800;
+  }
+  .card {
+    @apply bg-white/80;
+  }
+}
