@@ -54,6 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_2fa_enabled = models.BooleanField(default=False)          # 2FA enabled
     totp_secret = models.CharField(max_length=32, blank=True, null=True)  # TOTP secret for Authenticator apps
+    
+    # Recovery options
+    backup_codes = models.JSONField(default=list, blank=True)    # Backup recovery codes
+    recovery_email = models.EmailField(blank=True, null=True)    # Alternative recovery email
+    last_recovery_used = models.DateTimeField(blank=True, null=True)  # Track recovery usage
 
     # config
     USERNAME_FIELD = "email"

@@ -13,6 +13,8 @@ export default function Header() {
         {user ? (
           <>
             <Link to={user.role === 'admin' ? '/dashboard/admin' : '/dashboard/'} className="text-sm text-indigo-600 hover:text-indigo-700">Dashboard</Link>
+            <Link to="/profile" className="text-sm text-gray-700 dark:text-gray-200 hover:text-indigo-600">Profile</Link>
+            <Link to="/2fa-management" className="text-sm text-gray-700 dark:text-gray-200 hover:text-indigo-600">2FA</Link>
             <button onClick={logout} className="text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 py-1 px-3 rounded">Logout</button>
           </>
         ) : (

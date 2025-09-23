@@ -11,7 +11,13 @@ from .views import (
     PasswordResetConfirmView,
     TwoFASetupView,
     TwoFAVerifyView,
-    TwoFALoginView
+    TwoFALoginView,
+    TwoFAToggleView,
+    TwoFAStatusView,
+    GenerateBackupCodesView,
+    TwoFARecoveryLoginView,
+    TwoFARecoveryRequestView,
+    TwoFAEmergencyDisableView
 )
 
 urlpatterns = [
@@ -23,7 +29,17 @@ urlpatterns = [
     path("verify-otp/", VerifyOTPView.as_view(), name="verify-otp"),
     path("password-reset/", PasswordResetView.as_view(), name="password-reset"),
     path("password-reset-confirm/", PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
+    
+    # 2FA Management
     path("2fa/setup/", TwoFASetupView.as_view(), name="2fa-setup"),
     path("2fa/verify/", TwoFAVerifyView.as_view(), name="2fa-verify"),
     path("2fa/login/", TwoFALoginView.as_view(), name="2fa-login"),
+    path("2fa/toggle/", TwoFAToggleView.as_view(), name="2fa-toggle"),
+    path("2fa/status/", TwoFAStatusView.as_view(), name="2fa-status"),
+    
+    # 2FA Recovery Options
+    path("2fa/backup-codes/", GenerateBackupCodesView.as_view(), name="2fa-backup-codes"),
+    path("2fa/recovery-login/", TwoFARecoveryLoginView.as_view(), name="2fa-recovery-login"),
+    path("2fa/recovery-request/", TwoFARecoveryRequestView.as_view(), name="2fa-recovery-request"),
+    path("2fa/emergency-disable/", TwoFAEmergencyDisableView.as_view(), name="2fa-emergency-disable"),
 ]

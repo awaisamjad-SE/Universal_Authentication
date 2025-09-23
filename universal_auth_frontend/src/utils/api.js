@@ -35,13 +35,24 @@ export const register = (data) => api.post('/register/', data);
 export const sendOtp = (data) => api.post('/send-otp/', data);
 export const verifyOtp = (data) => api.post('/verify-otp/', data);
 export const login = (data) => api.post('/login/', data);
-export const twoFALogin = (data) => api.post('/2fa/login/', data);
+export const logout = () => api.post('/logout/');
 export const passwordReset = (data) => api.post('/password-reset/', data);
 export const passwordResetConfirm = (data) => api.post('/password-reset-confirm/', data);
 export const getProfile = () => api.get('/profile/');
 export const updateProfile = (data) => api.put('/profile/', data);
+
+// 2FA Management APIs
+export const twoFALogin = (data) => api.post('/2fa/login/', data);
 export const setup2FA = () => api.post('/2fa/setup/');
 export const verify2FA = (data) => api.post('/2fa/verify/', data);
+export const toggle2FA = (data) => api.post('/2fa/toggle/', data);
+export const get2FAStatus = () => api.get('/2fa/status/');
+
+// 2FA Recovery APIs
+export const generateBackupCodes = () => api.post('/2fa/backup-codes/');
+export const recoveryLogin = (data) => api.post('/2fa/recovery-login/', data);
+export const requestRecovery = (data) => api.post('/2fa/recovery-request/', data);
+export const emergencyDisable2FA = (data) => api.post('/2fa/emergency-disable/', data);
 
 // Token refresh (if your backend supports it at /api/token/refresh/)
 export const refreshToken = (refresh) =>

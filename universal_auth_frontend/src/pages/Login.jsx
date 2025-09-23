@@ -19,6 +19,7 @@ export default function Login() {
 
   useEffect(() => {
     if (user) navigate('/dashboard')
+    document.title = 'Basic Login - Universal Auth'
   }, [user, navigate])
 
   const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)

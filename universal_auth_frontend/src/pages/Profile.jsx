@@ -50,10 +50,30 @@ export default function Profile() {
         <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div><span className="font-semibold text-gray-700">Email:</span> <span className="text-gray-900">{user.email}</span></div>
           <div><span className="font-semibold text-gray-700">Email Verified:</span> <span className={user.is_email_verified ? 'text-green-600' : 'text-red-500'}>{user.is_email_verified ? 'Yes' : 'No'}</span></div>
-          <div className="flex items-center gap-2"><span className="font-semibold text-gray-700">2FA Enabled:</span> <span className={user.is_2fa_enabled ? 'text-green-600' : 'text-red-500'}>{user.is_2fa_enabled ? 'Yes' : 'No'}</span>
-            {!user.is_2fa_enabled && (
-              <Link to="/2fa-setup" className="ml-2 px-2 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700">Enable 2FA</Link>
-            )}
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="font-semibold text-gray-700">2FA Enabled:</span> 
+              <span className={user.is_2fa_enabled ? 'text-green-600 ml-2' : 'text-red-500 ml-2'}>
+                {user.is_2fa_enabled ? 'Yes' : 'No'}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              {!user.is_2fa_enabled ? (
+                <Link 
+                  to="/2fa-management" 
+                  className="px-3 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700"
+                >
+                  Enable 2FA
+                </Link>
+              ) : (
+                <Link 
+                  to="/2fa-management" 
+                  className="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
+                >
+                  Manage 2FA
+                </Link>
+              )}
+            </div>
           </div>
         </div>
         {msg && <div className="mb-4 text-sm text-green-600 font-medium">{msg}</div>}

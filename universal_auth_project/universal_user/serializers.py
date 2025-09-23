@@ -132,3 +132,77 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
         data["user"] = user
         return data
+
+
+class TwoFAToggleSerializer(serializers.Serializer):
+    """Serializer for enabling/disabling 2FA"""
+    action = serializers.ChoiceField(choices=[('enable', 'Enable'), ('disable', 'Disable')])
+    code = serializers.CharField(max_length=6, required=False)
+    
+    def validate_code(self, value):
+        if value and (not value.isdigit() or len(value) != 6):
+            raise serializers.ValidationError("Code must be a 6-digit number.")
+        return value
+
+    def validate(self, data):
+        action = data.get('action')
+        code = data.get('code')
+        
+        # For disable action, always require 2FA code for security
+        if action == 'disable' and not code:
+            raise serializers.ValidationError("2FA code is required to disable 2FA.")
+            
+        return data
+
+
+class TwoFARecoveryLoginSerializer(serializers.Serializer):
+    """Serializer for login using backup recovery codes"""
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    recovery_code = serializers.CharField(max_length=8)
+
+    def validate_recovery_code(self, value):
+        if not value.isalnum() or len(value) != 8:
+            raise serializers.ValidationError("Recovery code must be 8 alphanumeric characters.")
+        return value.upper()
+
+
+class TwoFARecoveryRequestSerializer(serializers.Serializer):
+    """Serializer for requesting 2FA recovery options"""
+    email = serializers.EmailField()
+    
+    def validate_email(self, value):
+        try:
+            from .models import User
+            user = User.objects.get(email=value)
+            if not user.is_2fa_enabled:
+                raise serializers.ValidationError("2FA is not enabled for this account.")
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Account not found.")
+        return value
+
+
+class TwoFARecoveryDisableSerializer(serializers.Serializer):
+    """Serializer for disabling 2FA using email verification"""
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+    confirm_disable = serializers.BooleanField()
+
+    def validate_otp(self, value):
+        if not value.isdigit() or len(value) != 6:
+            raise serializers.ValidationError("OTP must be a 6-digit number.")
+        return value
+
+    def validate_confirm_disable(self, value):
+        if not value:
+            raise serializers.ValidationError("You must confirm that you want to disable 2FA.")
+        return value
+
+
+class BackupCodesSerializer(serializers.Serializer):
+    """Serializer for backup codes response"""
+    backup_codes = serializers.ListField(
+        child=serializers.CharField(max_length=8),
+        read_only=True
+    )
+    message = serializers.CharField(read_only=True)

@@ -42,14 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 # CORS/CSRF settings for deployment (open for now, harden for production)
+    "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",  # if using logout
+    "universal_user",
+]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 # For DigitalOcean App Platform, add your app URL here in production:
 # CSRF_TRUSTED_ORIGINS = ['https://your-app-url.ondigitalocean.app']
-CSRF_TRUSTED_ORIGINS = ['*']  # Open for now, restrict in production
-    "rest_framework",
-    "rest_framework_simplejwt.token_blacklist",  # if using logout
-    "universal_user",
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:5173',  # For your frontend
+    'http://127.0.0.1:5173',
 ]
 
 # Custom User model
